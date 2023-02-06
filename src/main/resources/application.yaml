@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/user-db
+    username: postgres
+    password: YourStrong@Passw0rd
+    driver-class-name: org.postgresql.Driver
+
+account:
+  balance:
+    minValue: 100000

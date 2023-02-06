@@ -1,0 +1,88 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'org.jetbrains.kotlin.jvm' version '1.6.20'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.6.20'
+	id 'org.jetbrains.kotlin.plugin.noarg' version '1.6.20'
+}
+
+group = 'co.zip.candidate'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
+    testImplementation 'org.testcontainers:postgresql:1.17.6'
+}
+
+sourceSets {
+    unit {
+        kotlin.srcDir 'src/test/unit/kotlin'
+        resources.srcDir 'src/test/unit/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+
+    microservice {
+        kotlin.srcDir 'src/test/microservice/kotlin'
+        resources.srcDir 'src/test/microservice/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+
+    integration {
+        kotlin.srcDir 'src/test/integration/kotlin'
+        resources.srcDir 'src/test/integration/resources'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    unitImplementation.extendsFrom testImplementation
+    microserviceImplementation.extendsFrom testImplementation
+    integrationImplementation.extendsFrom testImplementation
+}
+
+task testUnit(type: Test, group: 'verification') {
+    testClassesDirs = sourceSets.unit.output.classesDirs
+    classpath = sourceSets.unit.runtimeClasspath
+    useJUnitPlatform()
+}
+
+task testIntegration(type: Test, group: 'verification') {
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    useJUnitPlatform()
+//    dependsOn testUnit
+}
+
+//todo rename Microservice to Component
+task testMicroservice(type: Test, group: 'verification') {
+    testClassesDirs = sourceSets.microservice.output.classesDirs
+    classpath = sourceSets.microservice.runtimeClasspath
+    useJUnitPlatform()
+//    dependsOn testIntegration
+}
+
+test {
+    dependsOn(testUnit, testIntegration, testMicroservice)
+}
+
+noArg {
+    annotation("javax.persistence.Entity")
+}
