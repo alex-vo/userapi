@@ -10,14 +10,13 @@ import javax.persistence.Table
 @Entity
 @Table(name = "`user`")
 data class UserEntity(
+    @Id
+    val id: UUID = UUID.randomUUID(),
     val name: String,
     val email: String,
     val monthlySalary: Long,
     val monthlyExpenses: Long,
 ) {
-    @Id
-    val id: UUID = UUID.randomUUID()
-
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
-    val accounts: List<AccountEntity> = emptyList()
+    var accounts: List<AccountEntity> = emptyList()
 }

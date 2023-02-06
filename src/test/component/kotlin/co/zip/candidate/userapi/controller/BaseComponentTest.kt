@@ -1,6 +1,8 @@
 package co.zip.candidate.userapi.controller
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
+import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.testcontainers.containers.PostgreSQLContainer
@@ -59,7 +62,8 @@ abstract class BaseComponentTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    val jacksonObjectMapper = jacksonObjectMapper()
+    val jacksonObjectMapper: ObjectMapper = jacksonObjectMapper()
+        .configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     final inline fun <reified R> MvcResult.getResponseDTO(): R {
         return this.response.contentAsString
@@ -70,9 +74,12 @@ abstract class BaseComponentTest {
         return jacksonObjectMapper.readValue(this, object : TypeReference<R>() {})
     }
 
-//    lateinit var precreatedValidUser: UserEntity
-//    lateinit var precreatedUserLowSalaryExpenseRatio: UserEntity
-//    lateinit var precreatedValidUserAccount: AccountEntity
+    fun performPost(url: String, body: String? = null): ResultActionsDsl {
+        return mockMvc.post(url) {
+            contentType = MediaType.APPLICATION_JSON
+            content = body
+        }
+    }
 
     final inline fun <reified T> performSuccessfulPost(url: String, body: String): T {
         return mockMvc.post(url) {

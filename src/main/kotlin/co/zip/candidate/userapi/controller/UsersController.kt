@@ -2,6 +2,7 @@ package co.zip.candidate.userapi.controller
 
 import co.zip.candidate.userapi.dto.UserDTO
 import co.zip.candidate.userapi.service.UserService
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -19,12 +20,12 @@ class UsersController(
 ) {
 
     @GetMapping
-    fun getAll(pageable: Pageable) = userService.getUsers(pageable)
+    fun getAll(pageable: Pageable): Page<UserDTO> = userService.getUsers(pageable)
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: UUID) = userService.get(id)
+    fun get(@PathVariable id: UUID): UserDTO = userService.get(id)
 
     @PostMapping
-    fun create(@Valid @RequestBody userDTO: UserDTO) = userService.create(userDTO)
+    fun create(@Valid @RequestBody userDTO: UserDTO): UserDTO = userService.create(userDTO)
 
 }

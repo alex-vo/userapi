@@ -3,7 +3,7 @@ package co.zip.candidate.userapi.service
 import co.zip.candidate.userapi.config.AccountBalanceProperties
 import co.zip.candidate.userapi.dto.AccountDTO
 import co.zip.candidate.userapi.entity.AccountEntity
-import co.zip.candidate.userapi.exception.UserValidationException
+import co.zip.candidate.userapi.exception.SalaryExpensesRatioException
 import co.zip.candidate.userapi.mapper.toDTO
 import co.zip.candidate.userapi.repository.AccountRepository
 import co.zip.candidate.userapi.repository.UserRepository
@@ -24,7 +24,7 @@ class AccountService(
         val user = userRepository.getUserById(userId)
 
         if (user.monthlySalary - user.monthlyExpenses < accountBalanceProperties.minValue) {
-            throw UserValidationException("salary/expenses ratio too low")
+            throw SalaryExpensesRatioException("salary/expenses ratio too low")
         }
 
         return accountRepository.save(AccountEntity(user))

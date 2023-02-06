@@ -2,17 +2,12 @@ package co.zip.candidate.userapi.controller
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.post
 
 class ClientExceptionHandlerTest : BaseComponentTest() {
 
     @Test
     fun `should handle HttpMessageNotReadableException correctly`() {
-        val result: Map<String, String> = mockMvc.post("/v1/users") {
-            contentType = MediaType.APPLICATION_JSON
-            content = "{}"
-        }
+        val result: Map<String, String> = performPost("/v1/users", "{}")
             .andExpect { status { isBadRequest() } }
             .andReturn()
             .getResponseDTO()
@@ -22,10 +17,7 @@ class ClientExceptionHandlerTest : BaseComponentTest() {
 
     @Test
     fun `should handle MethodArgumentNotValidException correctly`() {
-        val result: Map<String, String> = mockMvc.post("/v1/users") {
-            contentType = MediaType.APPLICATION_JSON
-            content = "/invalid_user.json".asResourceContent()
-        }
+        val result: Map<String, String> = performPost("/v1/users", "/invalid_user.json".asResourceContent())
             .andExpect { status { isBadRequest() } }
             .andReturn()
             .getResponseDTO()
@@ -36,14 +28,14 @@ class ClientExceptionHandlerTest : BaseComponentTest() {
         assertEquals("must not be blank", result["name"])
     }
 
-//    @Test
-//    fun `should handle ZipValidationException correctly`() {
-//        val result: Map<String, String> = mockMvc.post("/v1/users/${precreatedUserLowSalaryExpenseRatio.id}/accounts")
-//            .andExpect { status { isBadRequest() } }
-//            .andReturn()
-//            .getResponseDTO()
-//
-//        assertEquals("salary/expenses ratio too low", result["message"])
-//    }
+    @Test
+    fun `should handle SalaryExpensesRatioException correctly`() {
+        val result: Map<String, String> = performPost("/v1/users/ebed4c17-844e-4331-b507-044618d9d146/accounts")
+            .andExpect { status { isBadRequest() } }
+            .andReturn()
+            .getResponseDTO()
+
+        assertEquals("salary/expenses ratio too low", result["message"])
+    }
 
 }

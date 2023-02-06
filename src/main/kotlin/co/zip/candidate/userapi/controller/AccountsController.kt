@@ -1,5 +1,6 @@
 package co.zip.candidate.userapi.controller
 
+import co.zip.candidate.userapi.dto.AccountDTO
 import co.zip.candidate.userapi.service.AccountService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,9 +16,9 @@ class AccountsController(
 ) {
 
     @PostMapping
-    fun create(@PathVariable userId: UUID) = accountService.create(userId)
+    fun create(@PathVariable userId: UUID): AccountDTO = accountService.create(userId)
 
     @GetMapping
-    fun get(@PathVariable userId: UUID) = accountService.get(userId)
+    fun get(@PathVariable userId: UUID): List<AccountDTO> = accountService.get(userId)
 
 }

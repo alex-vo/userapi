@@ -7,4 +7,4 @@ spring:
 
 account:
   balance:
-    minValue: 100000
+    minValue: 60000

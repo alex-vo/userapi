@@ -16,16 +16,16 @@ class UserService(
     private val userRepository: UserRepository
 ) {
 
-    fun getUsers(pageable: Pageable): Page<UserDTO> {
-        return userRepository.findAll(pageable)
+    fun getUsers(pageable: Pageable): Page<UserDTO> =
+        userRepository.findAll(pageable)
             .map { it.toDTO() }
-    }
 
-    fun get(id: UUID) = userRepository.findById(id)
-        .orElseThrow {
-            ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found")
-        }
-        .toDTO()
+    fun get(id: UUID): UserDTO =
+        userRepository.findById(id)
+            .orElseThrow {
+                ResponseStatusException(HttpStatus.BAD_REQUEST, "user not found")
+            }
+            .toDTO()
 
     fun create(userDTO: UserDTO): UserDTO {
         if (userRepository.existsByEmail(userDTO.email)) {

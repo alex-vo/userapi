@@ -43,7 +43,7 @@ class UserServiceTest {
 
     @Test
     fun `should get a user`() {
-        val userEntity = UserEntity("John Doe", "john@doe.com", 2, 1)
+        val userEntity = UserEntity(name = "John Doe", email = "john@doe.com", monthlySalary = 2, monthlyExpenses = 1)
         whenever(userRepository.findById(userEntity.id)).thenReturn(Optional.of(userEntity))
 
         val result = userService.get(userEntity.id)
@@ -61,7 +61,16 @@ class UserServiceTest {
     fun `should fail to create a user if email is already used`() {
         whenever(userRepository.existsByEmail("john@doe.com")).thenReturn(true)
 
-        assertThrows<ResponseStatusException> { userService.create(UserDTO(name = "John Doe", email = "john@doe.com", monthlySalary = 2, monthlyExpenses = 1)) }
+        assertThrows<ResponseStatusException> {
+            userService.create(
+                UserDTO(
+                    name = "John Doe",
+                    email = "john@doe.com",
+                    monthlySalary = 2,
+                    monthlyExpenses = 1
+                )
+            )
+        }
             .let {
                 assertEquals(HttpStatus.BAD_REQUEST, it.status)
                 assertEquals("email already taken", it.reason)

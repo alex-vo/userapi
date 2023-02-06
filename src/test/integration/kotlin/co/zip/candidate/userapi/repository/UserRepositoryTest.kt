@@ -26,8 +26,8 @@ class UserRepositoryTest : BaseIntegrationTest() {
             assertEquals(UUID.fromString("ebed4c17-844e-4331-b507-044618d9d146"), id)
             assertEquals("John", name)
             assertEquals("john@doe.com", email)
-            assertEquals(2000000L, monthlySalary)
-            assertEquals(1500000L, monthlyExpenses)
+            assertEquals(200000L, monthlySalary)
+            assertEquals(150000L, monthlyExpenses)
         }
     }
 
@@ -41,8 +41,8 @@ class UserRepositoryTest : BaseIntegrationTest() {
             assertEquals(UUID.fromString("0e370603-54f0-4f7e-8636-4d121e1932df"), id)
             assertEquals("Jane", name)
             assertEquals("jane@doe.com", email)
-            assertEquals(3000000L, monthlySalary)
-            assertEquals(2000000L, monthlyExpenses)
+            assertEquals(300000L, monthlySalary)
+            assertEquals(200000L, monthlyExpenses)
         }
     }
 
@@ -54,8 +54,8 @@ class UserRepositoryTest : BaseIntegrationTest() {
             assertEquals(UUID.fromString("ebed4c17-844e-4331-b507-044618d9d146"), id)
             assertEquals("John", name)
             assertEquals("john@doe.com", email)
-            assertEquals(2000000L, monthlySalary)
-            assertEquals(1500000L, monthlyExpenses)
+            assertEquals(200000L, monthlySalary)
+            assertEquals(150000L, monthlyExpenses)
         }
     }
 

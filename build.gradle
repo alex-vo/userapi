@@ -37,9 +37,9 @@ sourceSets {
         runtimeClasspath += main.output + test.output
     }
 
-    microservice {
-        kotlin.srcDir 'src/test/microservice/kotlin'
-        resources.srcDir 'src/test/microservice/resources'
+    component {
+        kotlin.srcDir 'src/test/component/kotlin'
+        resources.srcDir 'src/test/component/resources'
         compileClasspath += main.output + test.output
         runtimeClasspath += main.output + test.output
     }
@@ -54,8 +54,8 @@ sourceSets {
 
 configurations {
     unitImplementation.extendsFrom testImplementation
-    microserviceImplementation.extendsFrom testImplementation
     integrationImplementation.extendsFrom testImplementation
+    componentImplementation.extendsFrom testImplementation
 }
 
 task testUnit(type: Test, group: 'verification') {
@@ -68,19 +68,18 @@ task testIntegration(type: Test, group: 'verification') {
     testClassesDirs = sourceSets.integration.output.classesDirs
     classpath = sourceSets.integration.runtimeClasspath
     useJUnitPlatform()
-//    dependsOn testUnit
+    dependsOn testUnit
 }
 
-//todo rename Microservice to Component
-task testMicroservice(type: Test, group: 'verification') {
-    testClassesDirs = sourceSets.microservice.output.classesDirs
-    classpath = sourceSets.microservice.runtimeClasspath
+task testComponent(type: Test, group: 'verification') {
+    testClassesDirs = sourceSets.component.output.classesDirs
+    classpath = sourceSets.component.runtimeClasspath
     useJUnitPlatform()
-//    dependsOn testIntegration
+    dependsOn testIntegration
 }
 
 test {
-    dependsOn(testUnit, testIntegration, testMicroservice)
+    dependsOn(testUnit, testIntegration, testComponent)
 }
 
 noArg {

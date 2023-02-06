@@ -1,7 +1,7 @@
 package co.zip.candidate.userapi.controller
 
 import co.zip.candidate.userapi.exception.EntityNotFoundException
-import co.zip.candidate.userapi.exception.UserValidationException
+import co.zip.candidate.userapi.exception.SalaryExpensesRatioException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -54,19 +54,21 @@ class ClientExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UserValidationException::class)
+    @ExceptionHandler(SalaryExpensesRatioException::class)
     @ResponseBody
-    fun handleZipValidationException(e: UserValidationException): Map<String, String> {
+    fun handleSalaryExpensesRatioException(e: SalaryExpensesRatioException): ResponseEntity<Map<String, String>> {
         log.error("Validation failed", e)
-        return mapOf("message" to e.message)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(mapOf("message" to e.message))
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityNotFoundException::class)
     @ResponseBody
-    fun handleEntityNotFoundException(e: EntityNotFoundException): Map<String, String> {
+    fun handleEntityNotFoundException(e: EntityNotFoundException): ResponseEntity<Map<String, String>> {
         log.error("Entity not found", e)
-        return mapOf("message" to e.message)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(mapOf("message" to e.message))
     }
 
 }
