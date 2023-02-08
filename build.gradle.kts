@@ -30,8 +30,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
     testImplementation("org.testcontainers:postgresql:1.17.6")
-//    testImplementation("org.testcontainers:mockserver:1.17.6")
-//    testImplementation("org.mock-server:mockserver-netty:5.15.0")
 }
 
 sourceSets {
