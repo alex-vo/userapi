@@ -1,3 +1,5 @@
+![example workflow](https://github.com/alex-vo/userapi/workflows/build/badge.svg)
+
 # Zip Candidate User API Challenge: Java
 We have a fictitious scenario where we'd like to build an API to manage Zip Pay users. We require the ability to create, get, and list users. Once we create users, we need the ability for the user to create an account.
 
