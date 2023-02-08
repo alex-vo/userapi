@@ -1,9 +1,9 @@
 package co.zip.candidate.userapi.dto
 
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
 import java.util.UUID
-import javax.validation.constraints.Email
-import javax.validation.constraints.Min
-import javax.validation.constraints.NotBlank
 
 data class UserDTO(
     val id: UUID? = null,

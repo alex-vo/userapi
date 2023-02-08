@@ -1,5 +1,6 @@
 package co.zip.candidate.userapi.controller
 
+import co.zip.candidate.userapi.exception.EmailAlreadyTakenException
 import co.zip.candidate.userapi.exception.EntityNotFoundException
 import co.zip.candidate.userapi.exception.SalaryExpensesRatioException
 import org.slf4j.Logger
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.server.ResponseStatusException
 import java.util.function.Consumer
 
 @ControllerAdvice
@@ -45,19 +45,11 @@ class ClientExceptionHandler {
         return errors
     }
 
-    @ExceptionHandler(ResponseStatusException::class)
-    @ResponseBody
-    fun handleResponseStatusException(e: ResponseStatusException): ResponseEntity<Map<String, String>> {
-        log.error("error while processing payload", e)
-        return ResponseEntity.status(e.status)
-            .body(mapOf("message" to (e.reason ?: "internal error")))
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SalaryExpensesRatioException::class)
     @ResponseBody
     fun handleSalaryExpensesRatioException(e: SalaryExpensesRatioException): ResponseEntity<Map<String, String>> {
-        log.error("Validation failed", e)
+        log.error(e.message, e)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(mapOf("message" to e.message))
     }
@@ -66,9 +58,18 @@ class ClientExceptionHandler {
     @ExceptionHandler(EntityNotFoundException::class)
     @ResponseBody
     fun handleEntityNotFoundException(e: EntityNotFoundException): ResponseEntity<Map<String, String>> {
-        log.error("Entity not found", e)
+        log.error(e.message, e)
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(mapOf("message" to e.message))
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmailAlreadyTakenException::class)
+    @ResponseBody
+    fun handleEmailAlreadyTakenException(e: EmailAlreadyTakenException): ResponseEntity<Map<String, String>> {
+        log.error(e.message, e)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(mapOf("message" to (e.message ?: "internal error")))
     }
 
 }

@@ -1,15 +1,15 @@
 package co.zip.candidate.userapi.entity
 
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.util.UUID
-import javax.persistence.CascadeType
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.OneToMany
-import javax.persistence.Table
 
 @Entity
 @Table(name = "`user`")
-data class UserEntity(
+open class UserEntity(
     @Id
     val id: UUID = UUID.randomUUID(),
     val name: String,
@@ -17,6 +17,6 @@ data class UserEntity(
     val monthlySalary: Long,
     val monthlyExpenses: Long,
 ) {
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "user")
+    @OneToMany(targetEntity = AccountEntity::class, cascade = [CascadeType.ALL], mappedBy = "user")
     var accounts: List<AccountEntity> = emptyList()
 }

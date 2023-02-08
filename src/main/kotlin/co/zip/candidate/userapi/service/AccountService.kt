@@ -3,6 +3,7 @@ package co.zip.candidate.userapi.service
 import co.zip.candidate.userapi.config.AccountBalanceProperties
 import co.zip.candidate.userapi.dto.AccountDTO
 import co.zip.candidate.userapi.entity.AccountEntity
+import co.zip.candidate.userapi.exception.EntityNotFoundException
 import co.zip.candidate.userapi.exception.SalaryExpensesRatioException
 import co.zip.candidate.userapi.mapper.toDTO
 import co.zip.candidate.userapi.repository.AccountRepository
@@ -24,7 +25,7 @@ class AccountService(
         val user = userRepository.getUserById(userId)
 
         if (user.monthlySalary - user.monthlyExpenses < accountBalanceProperties.minValue) {
-            throw SalaryExpensesRatioException("salary/expenses ratio too low")
+            throw SalaryExpensesRatioException("Salary/expenses ratio too low for user $userId")
         }
 
         return accountRepository.save(AccountEntity(user))
@@ -32,7 +33,8 @@ class AccountService(
     }
 
     fun get(userId: UUID): List<AccountDTO> =
-        userRepository.getUserById(userId)
+        userRepository.findById(userId)
+            .orElseThrow { EntityNotFoundException("User $userId not found") }
             .accounts
             .map { it.toDTO() }
 

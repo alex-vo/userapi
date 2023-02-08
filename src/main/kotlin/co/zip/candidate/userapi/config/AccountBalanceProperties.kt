@@ -1,10 +1,10 @@
 package co.zip.candidate.userapi.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.ConstructorBinding
+import org.springframework.boot.context.properties.bind.ConstructorBinding
 
 @ConfigurationProperties(prefix = "account.balance")
-@ConstructorBinding
-data class AccountBalanceProperties(
+data class AccountBalanceProperties
+@ConstructorBinding constructor(
     val minValue: Long
 )
